@@ -593,4 +593,372 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('%c Looking to hire? Contact: sg276278@gmail.com', 
         'color: #b3b3b3; font-size: 12px;');
 
+          // ========== AI CHATBOT ==========
+    
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotWindow = document.getElementById('chatbot-window');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotSend = document.getElementById('chatbot-send');
+    const quickReplies = document.querySelectorAll('.quick-reply');
+    
+    // Knowledge Base - Information about Shashank
+    const knowledgeBase = {
+        // Greetings
+        greetings: [
+            "Hey there! 👋 How can I help you learn about Shashank today?",
+            "Hello! 😊 I'm here to tell you all about Shashank's skills and experience!",
+            "Hi! 👋 What would you like to know about Shashank?"
+        ],
+        
+        // Skills
+        skills: `💻 **Shashank's Technical Skills:**
+
+**Programming Languages:**
+• Python, Java, JavaScript, C++
+
+**Backend & Web Development:**
+• Node.js, Express.js, Flask, REST APIs
+• HTML5, CSS3, JavaScript
+
+**Databases:**
+• MySQL 8.0+, ACID Transactions
+• Stored Procedures, Query Optimization
+
+**Machine Learning & AI:**
+• scikit-learn, PyTorch, TensorFlow
+• pandas, NumPy, Feature Engineering
+
+**Generative AI:**
+• Prompt Engineering, Gemini API, ChatGPT
+
+**Tools:**
+• Git, GitHub, VS Code, Jupyter
+• Power BI, AWS, Azure, GCP
+
+He's a versatile full-stack developer with strong AI/ML skills! 🚀`,
+
+        // Projects
+        projects: `🚀 **Shashank's Key Projects:**
+
+**1. Enterprise Inventory & Sales Management System**
+Built with Node.js, Express.js, MySQL, JWT
+• ACID-compliant transactions
+• Role-based access control
+• ~50ms response times
+• Real-time dashboard
+
+**2. Quantum Machine Learning for Drug Prediction**
+Built with Python, Qiskit, Pennylane
+• Quantum-enhanced ML techniques
+• Healthcare AI application
+
+**3. Pose Detection & Correction System**
+Built with Python, OpenCV
+• Real-time pose detection
+• Computer vision implementation
+
+**4. ToDo List Task Manager**
+Full-stack app with Flask, HTML, CSS, JS, SQL
+
+Want to see the code? Check out his GitHub! 👉 github.com/shagowda`,
+
+        // Experience
+        experience: `💼 **Shashank's Professional Experience:**
+
+**Software Engineering Intern**
+📍 Rooman Technologies, Bengaluru
+📅 Sep 2024 – Mar 2025
+• Built Python & Flask REST APIs
+• Followed SDLC best practices
+• Participated in Agile ceremonies
+
+**Data Science / AI Intern**
+📍 TalentBrainy
+📅 May 2024 – Oct 2024
+• Developed ML models for forest fire prediction
+• Data cleaning & feature engineering
+• Built reliable ML pipelines
+
+**Full-Stack Development Intern**
+📍 VTU Virtual Internship (Rooman)
+📅 Oct 2023 – Nov 2023
+• Developed full-stack web modules
+• Used Git & Agile workflows
+
+He has solid real-world experience! 💪`,
+
+        // Education
+        education: `🎓 **Shashank's Education:**
+
+**B.Tech in AI & Machine Learning**
+📍 Rajarajeswari College of Engineering, Bengaluru
+📅 2021 – 2025
+📊 GPA: 7.0
+
+**Relevant Coursework:**
+• Artificial Intelligence
+• Machine Learning & Deep Learning
+• Data Science & Data Mining
+• Computer Vision
+• Cloud Computing
+• Probability & Statistics
+
+He graduated in 2025 with strong AI/ML foundations! 🎓`,
+
+        // Contact
+        contact: `📧 **Get in Touch with Shashank:**
+
+📧 Email: sg276278@gmail.com
+📱 Phone: +91-7022917031
+📍 Location: Bengaluru, Karnataka, India
+
+🔗 **Social Links:**
+• LinkedIn: linkedin.com/in/shashankkc
+• GitHub: github.com/shagowda
+
+Or use the contact form on this page! He typically responds within 24 hours. 📬`,
+
+        // About
+        about: `👨‍💻 **About Shashank K.C:**
+
+Shashank is a **Results-driven B.Tech (2025) graduate** in AI & Machine Learning with strong foundations in:
+
+✅ Software Engineering
+✅ Backend System Design
+✅ Data Handling
+✅ Applied Machine Learning
+
+He has hands-on experience building **production-ready enterprise applications**, implementing secure authentication, and developing ML models on real-world datasets.
+
+He's seeking entry-level roles where strong engineering fundamentals and analytical thinking are valued!
+
+**Key Strengths:**
+• Strong analytical & problem-solving skills
+• Enterprise-grade backend design
+• Excellent communication
+• Fast learner & adaptable`,
+
+        // Hiring
+        hiring: `🤝 **Why Hire Shashank?**
+
+✅ **Strong Technical Skills** - Python, JavaScript, Node.js, ML/AI
+✅ **Real Experience** - 3 internships with proven results
+✅ **Project Portfolio** - 4 impressive projects including enterprise systems
+✅ **Quick Learner** - Adapts to new technologies fast
+✅ **Team Player** - Experienced in Agile & cross-functional teams
+✅ **Problem Solver** - Strong analytical thinking
+
+He's ready to contribute from Day 1! 🚀
+
+📧 Contact him at: sg276278@gmail.com`,
+
+        // Resume/CV
+        resume: `📄 **Shashank's Resume:**
+
+You can view his complete profile right here on this portfolio!
+
+The key sections include:
+• About Me
+• Technical Skills
+• Projects
+• Professional Experience
+
+For a downloadable resume, please contact him at:
+📧 sg276278@gmail.com
+
+Or connect on LinkedIn: linkedin.com/in/shashankkc 🔗`,
+
+        // Default/Unknown
+        default: [
+            "That's an interesting question! 🤔 I can tell you about Shashank's skills, projects, experience, education, or contact info. What would you like to know?",
+            "I'm not sure about that, but I can help with info about Shashank's background! Try asking about his skills, projects, or experience. 😊",
+            "Hmm, I don't have info on that. But ask me about Shashank's technical skills, projects, work experience, or how to contact him! 💡"
+        ]
+    };
+    
+    // Toggle chatbot window
+    if (chatbotToggle) {
+        chatbotToggle.addEventListener('click', function() {
+            chatbotToggle.classList.toggle('active');
+            chatbotWindow.classList.toggle('active');
+            if (chatbotWindow.classList.contains('active')) {
+                chatbotInput.focus();
+            }
+        });
+    }
+    
+    // Close chatbot
+    if (chatbotClose) {
+        chatbotClose.addEventListener('click', function() {
+            chatbotToggle.classList.remove('active');
+            chatbotWindow.classList.remove('active');
+        });
+    }
+    
+    // Send message function
+    function sendMessage(message) {
+        if (!message.trim()) return;
+        
+        // Add user message
+        addMessage(message, 'user');
+        
+        // Clear input
+        chatbotInput.value = '';
+        
+        // Remove quick replies after first message
+        const quickRepliesContainer = document.querySelector('.quick-replies');
+        if (quickRepliesContainer) {
+            quickRepliesContainer.style.display = 'none';
+        }
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Generate response after delay
+        setTimeout(function() {
+            removeTypingIndicator();
+            const response = generateResponse(message);
+            addMessage(response, 'bot');
+        }, 1000 + Math.random() * 1000);
+    }
+    
+    // Add message to chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}-message`;
+        
+        const avatar = sender === 'bot' 
+            ? '<div class="message-avatar"><i class="fas fa-robot"></i></div>'
+            : '<div class="message-avatar"><i class="fas fa-user"></i></div>';
+        
+        // Convert markdown-like formatting
+        let formattedText = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '</p><p>');
+        
+        messageDiv.innerHTML = `
+            ${avatar}
+            <div class="message-content">
+                <p>${formattedText}</p>
+            </div>
+        `;
+        
+        chatbotMessages.appendChild(messageDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+    
+    // Show typing indicator
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-message bot-message typing-message';
+        typingDiv.innerHTML = `
+            <div class="message-avatar"><i class="fas fa-robot"></i></div>
+            <div class="message-content">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        `;
+        chatbotMessages.appendChild(typingDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+    
+    // Remove typing indicator
+    function removeTypingIndicator() {
+        const typingMessage = document.querySelector('.typing-message');
+        if (typingMessage) {
+            typingMessage.remove();
+        }
+    }
+    
+    // Generate response based on user input
+    function generateResponse(input) {
+        const lowerInput = input.toLowerCase();
+        
+        // Check for greetings
+        if (lowerInput.match(/\b(hi|hello|hey|howdy|hola|greetings)\b/)) {
+            return knowledgeBase.greetings[Math.floor(Math.random() * knowledgeBase.greetings.length)];
+        }
+        
+        // Check for skills
+        if (lowerInput.match(/\b(skill|skills|technologies|tech stack|programming|languages|what can you do|what do you know)\b/)) {
+            return knowledgeBase.skills;
+        }
+        
+        // Check for projects
+        if (lowerInput.match(/\b(project|projects|portfolio|work|built|created|developed)\b/)) {
+            return knowledgeBase.projects;
+        }
+        
+        // Check for experience
+        if (lowerInput.match(/\b(experience|internship|intern|job|work history|career|professional)\b/)) {
+            return knowledgeBase.experience;
+        }
+        
+        // Check for education
+        if (lowerInput.match(/\b(education|study|college|university|degree|qualification|school|btech|graduate)\b/)) {
+            return knowledgeBase.education;
+        }
+        
+        // Check for contact
+        if (lowerInput.match(/\b(contact|email|phone|reach|connect|linkedin|github|hire|message)\b/)) {
+            return knowledgeBase.contact;
+        }
+        
+        // Check for about
+        if (lowerInput.match(/\b(about|who|tell me|introduce|yourself|shashank|background)\b/)) {
+            return knowledgeBase.about;
+        }
+        
+        // Check for hiring
+        if (lowerInput.match(/\b(why hire|hire him|why should|strengths|good at)\b/)) {
+            return knowledgeBase.hiring;
+        }
+        
+        // Check for resume/CV
+        if (lowerInput.match(/\b(resume|cv|download|pdf)\b/)) {
+            return knowledgeBase.resume;
+        }
+        
+        // Check for thanks
+        if (lowerInput.match(/\b(thanks|thank you|thx|appreciate)\b/)) {
+            return "You're welcome! 😊 Feel free to ask if you have more questions about Shashank. Have a great day! 🌟";
+        }
+        
+        // Check for bye
+        if (lowerInput.match(/\b(bye|goodbye|see you|later)\b/)) {
+            return "Goodbye! 👋 Thanks for visiting Shashank's portfolio. Don't forget to reach out if you'd like to connect! 🚀";
+        }
+        
+        // Default response
+        return knowledgeBase.default[Math.floor(Math.random() * knowledgeBase.default.length)];
+    }
+    
+    // Send button click
+    if (chatbotSend) {
+        chatbotSend.addEventListener('click', function() {
+            sendMessage(chatbotInput.value);
+        });
+    }
+    
+    // Enter key to send
+    if (chatbotInput) {
+        chatbotInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage(chatbotInput.value);
+            }
+        });
+    }
+    
+    // Quick reply buttons
+    quickReplies.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const message = this.getAttribute('data-message');
+            sendMessage(message);
+        });
+    });
 });
